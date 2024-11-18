@@ -58,3 +58,69 @@ El proyecto tiene como objetivo automatizar todas las etapas del ciclo de vida d
 
 
   
+## 4. Paso a paso del desarrollo del proyecto
+
+En esta sección se documenta el paso a paso realizado para completar el proyecto, desde la configuración del entorno en la nube hasta la implementación de los procesos de ingesta, procesamiento y almacenamiento de los datos. Se incluirán imágenes relevantes que ilustran cada uno de estos pasos.
+
+### 4.1. Configuración del entorno en GCP
+1. **Creación de buckets en cloud storage**:
+   - Se crearon tres buckets en GCP para manejar los datos en las distintas etapas:
+     - `p3_bucket_1` para la zona **Raw** (datos crudos).
+     - `p3_bucket_2` para la zona **Trusted** (datos procesados).
+     - `p3_bucket_3` para la zona **Refined** (resultados de análisis).
+   - ![image](https://github.com/user-attachments/assets/ed895fc0-c9d8-4cdf-a065-60a16fa1a0a7)
+
+
+### 4.2. Implementación de la Ingesta Automática
+1. **Cloud function para ingesta de datos**:
+   - Se desarrolló un script (`ingest_covid_data.py`) para realizar la ingestión automática de los datos.
+   - Se configuró una **Cloud Function** en GCP que ejecuta el script periódicamente.
+   - ![image](https://github.com/user-attachments/assets/1d6953d2-3ddd-4b54-937f-5eac3533b69c)
+
+
+2. **Configuración de cloud scheduler**:
+   - Para ejecutar la **Cloud Function** automáticamente, se configuró un **Cloud Scheduler** con la periodicidad requerida.
+   - ![image](https://github.com/user-attachments/assets/55d1af97-a67e-47f7-859b-0af0e6bc5ad7)
+
+
+### 4.3. Procesamiento ETL en dataproc
+1. **Creación del Cluster Dataproc**:
+   - Se configuró un **cluster Dataproc** en GCP con un nodo principal y dos nodos de trabajo.
+   - El cluster fue configurado con permisos para acceder a los buckets de almacenamiento.
+   - ![image](https://github.com/user-attachments/assets/b52eeeab-c345-4f2d-aba6-ae2939e13bf0)
+
+
+2. **Implementación del script ETL**:
+   - Se desarrolló el script (`covid_etl.py`) para realizar transformaciones ETL, como validación de datos nulos y estandarización de formatos.
+   - El script fue subido al bucket `p3_bucket_1` y posteriormente se creó un trabajo en el cluster **Dataproc** para su ejecución.
+   - ![image](https://github.com/user-attachments/assets/91f959a7-67eb-4206-90e7-7a69098329d5)
+
+
+### 4.4. Conexión con base de datos MySQL
+1. **Creación y Configuración de la Base de Datos**:
+   - Se configuró una base de datos **MySQL** en GCP para almacenar datos simulados.
+   - Se crearon las tablas `data_covid` y `data_covid_simulate` para almacenar los datos transformados y los datos de prueba.
+   - ![image](https://github.com/user-attachments/assets/b0088abb-19e9-4526-960c-7208f8bcff14)
+
+
+### 4.5. Automatización del análisis con Spark
+1. **Pipeline de Spark para Análisis Descriptivo**:
+   - Se desarrolló un script (`combine_covid_data.py`) que combina datos de la base de datos y realiza un análisis descriptivo usando **Spark**.
+   - Se subió el script al bucket `p3_bucket_3` y se creó un trabajo en el cluster **Dataproc** para su ejecución.
+   - ![image](https://github.com/user-attachments/assets/0a2d227b-abcb-4937-9a4e-284fddb263e4)
+.
+
+### 4.6. Automatización y actualización periódica
+1. **DataProc para Workflows**:
+   - Se utilizó **Jobs** para crear un workflow que automatizara la actualización y ejecución de los procesos periódicos.
+   - Este workflow permite la recolección, transformación y análisis sin intervención humana.
+   - ![image](https://github.com/user-attachments/assets/40b85690-d3c0-4554-aae8-4e422532b43e)
+
+
+### 4.7. Resultados y Almacenamiento Final
+1. **Almacenamiento de resultados en Refined Zone**:
+   - Los resultados del análisis y procesamiento fueron almacenados en `p3_bucket_3`.
+   - Estos resultados están listos para ser consultados mediante **Athena** o un endpoint mediante **API Gateway** (aún pendiente).
+   - 
+
+---
