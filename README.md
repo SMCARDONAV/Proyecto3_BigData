@@ -147,5 +147,20 @@ En esta sección se documenta el paso a paso realizado para completar el proyect
    - Los resultados se almacenan en csv divididos en particiones hechas por la escritura distribuida de Spark. 
 ![image](https://github.com/user-attachments/assets/e0520764-c50a-49da-bdca-fdc3bbd224e4)
  
+### 4.9 Consumo mediante API Gateway
+  - Se hace el consumo del bucket `p3_bucket_3` refined, en la carpeta ml_predictions.
+  1. Se crea una funcion en Cloud Function, la cual tiene el codigo del archivo read_files.py, tambien tiene el archivo requirements.txt en el cual se especifican las librerias necesarias.
+  ![Captura de pantalla 2024-11-20 174050](https://github.com/user-attachments/assets/1ef33904-0871-4cf5-9200-61bc3b4e4c55)
+2. Se procede a crear el api gateway, con la siguiente configuracion:
+   [Configuración Google Cloud API Gateway](https://github.com/user-attachments/files/17837542/screencapture-console-cloud-google-api-gateway-gateway-create-2024-11-20-06_56_49.pdf)
+  PD: Importante resaltar que el user-api2.yaml que se sube, nos piden el enlace de la Cloud Function creada previamente.
+3. Una vez creado el API Gateway, accederemos al enlace:
+   ![image](https://github.com/user-attachments/assets/bd4991a9-d6b5-44a6-af06-d05ed1e7fe37)
+ Le agregaremos a la ruta "/v1/user": https://apigateway3-us-12f79wr4.uc.gateway.dev/v1/user
 
+ Y veremos algo similar a lo siguiente: 
+ ![image](https://github.com/user-attachments/assets/ed86f239-0950-4def-985e-a748a7984e3f)
+
+ - Evidenciando un consumo eficiente de los datos desde la API Gateway, la estructura de los datos es la siguiente:
+ {[edad,sexo,fuente contagio],si se recupera, predicción de recuperado}
 ---
