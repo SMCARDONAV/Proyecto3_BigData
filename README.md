@@ -27,6 +27,9 @@ El proyecto tiene como objetivo automatizar todas las etapas del ciclo de vida d
 - Automatización del análisis y pipeline de Spark:
   - Creación de un script (`combine_covid_data.py`) para combinar y analizar datos provenientes de los buckets.
   - Automatización de la ejecución mediante **Cloud Scheduler** y **workflows**.
+- Implementación de modelo de aprendizaje de maquina supervisado:
+  - Creación de pipeline de SparkMl con consumo de datos del bucket trusted y almacenamiento de resultados en bucket refined.
+  - Creación y ejecución de Job dentro de cluster Dataproc.
 
 ### 1.2. Qué aspectos NO se cumplieron o desarrollaron de la activiadd (requerimientos funcionales y no funcionales)
 
@@ -43,6 +46,7 @@ El proyecto tiene como objetivo automatizar todas las etapas del ciclo de vida d
   - Spark 3.1.2
   - Pandas 1.3.3
   - PyMySQL 1.0.2
+  - Pyspark (definido por el tipo de trabajo del job)
 - **Buckets creados:**
   - `p3_bucket_1` (Raw Zone)
   - `p3_bucket_2` (Trusted Zone)
@@ -55,8 +59,7 @@ El proyecto tiene como objetivo automatizar todas las etapas del ciclo de vida d
 ### Cómo se compila y ejecuta
 - Para la **Cloud Function**, se implementa subiendo los archivos `ingest_covid_data.py` y `requirements.txt` y se despliega desde la consola de GCP.
 - **Script ETL** (`covid_etl.py`) se sube al bucket `p3_bucket_1` y se ejecuta creando un trabajo en el cluster **Dataproc**.
-
-
+- **Script pyspark** (`ml_predictions.py`) se sube al bucket `p3_bucket_3` en la carpeta scripts y se ejecuta creando un trabajo en el cluster dataproc con el tipo de trabajo de PySpark que referencia este script. 
   
 ## 4. Paso a paso del desarrollo del proyecto
 
@@ -121,6 +124,28 @@ En esta sección se documenta el paso a paso realizado para completar el proyect
 1. **Almacenamiento de resultados en Refined Zone**:
    - Los resultados del análisis y procesamiento fueron almacenados en `p3_bucket_3`.
    - Estos resultados están listos para ser consultados mediante **Athena** o un endpoint mediante **API Gateway** (aún pendiente).
+
+### 4.8. Modelo de aprendizaje supervisado
+1. **Creación de código para ejecutar un modelo de regresión que hace predicciones de recuperación donde:**:
+   - Se tomaron los datos del `p3_bucket_2`.
+   - Se seleccionaron los campos a tener en cuenta como caracteristicas para hacer una predicción.
+   - Se entrenó y evaluó el modelo.
+   - Se guardaron los datos en `p3_bucket_3`.
+2. **Almacenamiento de script en bucket**
+   - Se almacenó el script en el bucket `p3_bucket_3`.
    - 
+     <img width="227" alt="image" src="https://github.com/user-attachments/assets/b6e539b8-e9a8-4786-b51c-d0790f4d8509">
+
+3. **Creación de job en cluster de Dataproc**
+   - Se configuró un job para la ejecución del script con el tipo de trabajo Pyspark.
+4. **Ejecución de job**
+   
+     ![image](https://github.com/user-attachments/assets/c9aea385-6107-4097-bfac-da89f0c89971)
+   
+5. **Validación de almacenamiento de resultados**
+   - Los resultados se almacenan en el bucket `p3_bucket_3` refined.
+   - Los resultados se almacenan en csv divididos en particiones hechas por la escritura distribuida de Spark. 
+![image](https://github.com/user-attachments/assets/e0520764-c50a-49da-bdca-fdc3bbd224e4)
+ 
 
 ---
