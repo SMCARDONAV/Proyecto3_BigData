@@ -163,4 +163,38 @@ En esta sección se documenta el paso a paso realizado para completar el proyect
 
  - Evidenciando un consumo eficiente de los datos desde la API Gateway, la estructura de los datos es la siguiente:
  {[edad,sexo,fuente contagio],si se recupera, predicción de recuperado}
+
+## 5 Consumo mediante Big Query
+### 1. Acceso al Bucket en Google Cloud Storage (GCS)
+1. Abre la [Google Cloud Console](https://console.cloud.google.com/).
+2. En el menú de navegación, selecciona **Storage**.
+3. Busca el bucket llamado `p3_bucket_3`.
+4. Dentro del bucket, localiza la carpeta `refined`.
+5. Revisa los archivos disponibles para identificar los datos que deseas consultar.
+   ![image](https://github.com/user-attachments/assets/6b483ef0-c632-452b-b8b4-8d437d6901a6)
+   
+
+
+---
+
+### 2. Creación de Consulta en BigQuery
+1. Ve a la sección **BigQuery** en Google Cloud Console.
+2. En el menú de navegación, selecciona tu proyecto y dataset.
+3. Haz clic en **+ CONSULTA** para abrir el editor SQL.
+4. Escribe la consulta para extraer los datos. Por ejemplo:
+
+   ```sql
+   SELECT 
+       t1.cod_municipio_nom, 
+       t1.departamento_nom, 
+       t1.edad, 
+       t1.estado, 
+       t1.fecha_de_notificaci_on
+   FROM `bridge-project-id.Analysis.refined` t1
+   WHERE DATE(t1.fecha_de_notificaci_on) BETWEEN '2020-07-01' AND '2020-07-31'
+---
+
+
+
+
 ---
