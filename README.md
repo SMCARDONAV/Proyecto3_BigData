@@ -174,10 +174,64 @@ En esta sección se documenta el paso a paso realizado para completar el proyect
    ![image](https://github.com/user-attachments/assets/6b483ef0-c632-452b-b8b4-8d437d6901a6)
    
 
+### 2 Pasos para Crear una Tabla en BigQuery desde Google Cloud Storage
+
+### 2.1. Abrir la Consola de BigQuery
+1. Ve a la [Google Cloud Console](https://console.cloud.google.com/).
+2. Selecciona **BigQuery** en el menú de navegación.
 
 ---
 
-### 2. Creación de Consulta en BigQuery
+## 2.2. Iniciar el Proceso de Creación de la Tabla
+1. Haz clic en el botón **Crear tabla**.
+
+---
+
+## 2.3. Configurar la Fuente de Datos
+1. En la sección **Fuente**, selecciona:
+   - **Fuente de datos:** Google Cloud Storage.
+   - **Ubicación del archivo:** Haz clic en **Examinar** y navega al bucket correspondiente.
+   - Selecciona el archivo en el bucket (por ejemplo, `p3_bucket_3/refined`).
+2. Define el **Formato del archivo**:
+   - Elige el formato adecuado (CSV, JSON, Avro, etc.).
+3. Si el archivo contiene encabezados, marca la casilla **Usar la primera fila como encabezados** (opcional).
+
+---
+
+## 2.4. Configurar el Destino de la Tabla
+1. En la sección **Destino**, selecciona:
+   - **Proyecto:** Elige el proyecto en el que estás trabajando.
+   - **Conjunto de datos:** Selecciona el dataset donde se creará la tabla.
+   - **Nombre de la tabla:** Escribe un nombre para la nueva tabla.
+
+---
+
+## 2.5. Configurar el Esquema de la Tabla
+1. Define el esquema de la tabla:
+   - **Automático:** Deja que BigQuery detecte el esquema basándose en el archivo.
+   - **Manual:** Ingresa las columnas y tipos de datos manualmente.
+2. (Opcional) Configura las opciones de partición y clustering según tus necesidades.
+
+---
+
+## 2.6. Crear la Tabla
+1. Haz clic en el botón **Crear tabla**.
+2. Espera a que el proceso de creación termine.
+
+---
+
+## 2.7. Validar la Tabla
+1. Navega al dataset donde se creó la tabla.
+2. Ejecuta una consulta simple para validar los datos cargados, por ejemplo:
+
+   ```sql
+   SELECT * 
+   FROM `project_id.dataset_id.table_id`
+   LIMIT 10;
+
+---
+
+### 3. Creación de Consulta en BigQuery
 1. Ve a la sección **BigQuery** en Google Cloud Console.
 2. En el menú de navegación, selecciona tu proyecto y dataset.
 3. Haz clic en **+ CONSULTA** para abrir el editor SQL.
