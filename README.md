@@ -213,12 +213,14 @@ En esta sección se documenta el paso a paso realizado para completar el proyect
 2. (Opcional) Configura las opciones de partición y clustering según tus necesidades.
 
 ---
+![image](https://github.com/user-attachments/assets/9988072c-cba6-4c68-969b-329b21c69473)
 
 ## 2.6. Crear la Tabla
 1. Haz clic en el botón **Crear tabla**.
 2. Espera a que el proceso de creación termine.
 
 ---
+![image](https://github.com/user-attachments/assets/448c2c77-a234-4825-bcb2-bb934b48eac3)
 
 ## 2.7. Validar la Tabla
 1. Navega al dataset donde se creó la tabla.
